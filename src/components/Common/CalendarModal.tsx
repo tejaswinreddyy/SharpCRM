@@ -17,7 +17,7 @@ const CalendarModal: React.FC<CalendarModalProps> = ({ isOpen, onClose }) => {
     {
       id: '1',
       title: 'Sales Review Meeting',
-      date: '2024-01-22',
+      date: '2025-06-15', // Updated to match current date context (June 15, 2025)
       time: '10:00 AM',
       type: 'meeting',
       attendees: ['Sarah Johnson', 'Mike Chen']
@@ -25,7 +25,7 @@ const CalendarModal: React.FC<CalendarModalProps> = ({ isOpen, onClose }) => {
     {
       id: '2',
       title: 'Client Demo - TechCorp',
-      date: '2024-01-23',
+      date: '2025-06-16',
       time: '2:00 PM',
       type: 'demo',
       attendees: ['John Smith']
@@ -33,14 +33,14 @@ const CalendarModal: React.FC<CalendarModalProps> = ({ isOpen, onClose }) => {
     {
       id: '3',
       title: 'Follow-up Call',
-      date: '2024-01-24',
+      date: '2025-06-17',
       time: '11:30 AM',
       type: 'call'
     },
     {
       id: '4',
       title: 'Proposal Presentation',
-      date: '2024-01-25',
+      date: '2025-06-18',
       time: '3:00 PM',
       type: 'meeting',
       attendees: ['Emily Davis', 'Alex Rodriguez']
@@ -48,7 +48,7 @@ const CalendarModal: React.FC<CalendarModalProps> = ({ isOpen, onClose }) => {
     {
       id: '5',
       title: 'Contract Review',
-      date: '2024-01-26',
+      date: '2025-06-19',
       time: '9:00 AM',
       type: 'task'
     }
@@ -72,6 +72,20 @@ const CalendarModal: React.FC<CalendarModalProps> = ({ isOpen, onClose }) => {
     // Add days of the month
     for (let day = 1; day <= daysInMonth; day++) {
       days.push(new Date(year, month, day));
+    }
+    
+    return days;
+  };
+
+  const getWeekDays = (date: Date) => {
+    const startOfWeek = new Date(date);
+    startOfWeek.setDate(date.getDate() - date.getDay()); // Set to Sunday of the current week
+    const days = [];
+    
+    for (let i = 0; i < 7; i++) {
+      const day = new Date(startOfWeek);
+      day.setDate(startOfWeek.getDate() + i);
+      days.push(day);
     }
     
     return days;
@@ -189,6 +203,58 @@ const CalendarModal: React.FC<CalendarModalProps> = ({ isOpen, onClose }) => {
     );
   };
 
+  const renderWeekView = () => {
+    const days = getWeekDays(currentDate);
+    const today = new Date();
+
+    return (
+      <div className="grid grid-cols-7 gap-1">
+        {days.map((day, index) => (
+          <div key={index} className="p-2 text-center text-sm font-medium text-gray-500 border-b">
+            {day.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric' })}
+          </div>
+        ))}
+        {days.map((day, index) => (
+          <div key={index} className="min-h-[150px] border border-gray-100 p-2">
+            <button
+              onClick={() => setSelectedDate(day)}
+              className={`w-6 h-6 text-sm rounded-full hover:bg-gray-100 transition-colors ${
+                day.toDateString() === today.toDateString()
+                  ? 'bg-blue-100 text-blue-700 font-semibold'
+                  : ''
+              } ${
+                selectedDate && day.toDateString() === selectedDate.toDateString()
+                  ? 'bg-blue-600 text-white'
+                  : ''
+              }`}
+            >
+              {day.getDate()}
+            </button>
+            <div className="mt-2 space-y-2">
+              {getEventsForDate(day).map(event => (
+                <div
+                  key={event.id}
+                  className={`text-xs p-1 rounded text-white ${getEventTypeColor(event.type)}`}
+                >
+                  <div className="font-medium truncate">{event.title}</div>
+                  <div className="text-xs opacity-90">{event.time}</div>
+                  {event.attendees && (
+                    <div className="text-xs opacity-90 truncate">
+                      {event.attendees.join(', ')}
+                    </div>
+                  )}
+                </div>
+              ))}
+              {getEventsForDate(day).length === 0 && (
+                <div className="text-xs text-gray-500">No events</div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   const renderDayView = () => {
     const dayEvents = getEventsForDate(currentDate);
     const hours = Array.from({ length: 24 }, (_, i) => i);
@@ -290,16 +356,12 @@ const CalendarModal: React.FC<CalendarModalProps> = ({ isOpen, onClose }) => {
             {/* Calendar Content */}
             <div className="mb-6">
               {viewMode === 'month' && renderMonthView()}
+              {viewMode === 'week' && renderWeekView()}
               {viewMode === 'day' && renderDayView()}
-              {viewMode === 'week' && (
-                <div className="text-center text-gray-500 py-8">
-                  Week view coming soon...
-                </div>
-              )}
             </div>
 
             {/* Selected Date Events */}
-            {selectedDate && viewMode === 'month' && (
+            {(viewMode === 'month' || viewMode === 'week') && selectedDate && (
               <div className="mt-6 pt-6 border-t border-gray-200">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
                   Events for {selectedDate.toLocaleDateString('en-US', { 

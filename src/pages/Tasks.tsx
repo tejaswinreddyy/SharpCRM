@@ -119,10 +119,7 @@ const Tasks: React.FC = () => {
         <Icons.Filter className="w-4 h-4 mr-2" />
         Filter
       </button>
-      <button className="flex items-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-        <Icons.Download className="w-4 h-4 mr-2" />
-        Export
-      </button>
+      
       <button
         className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
         onClick={() => {

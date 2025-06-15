@@ -81,12 +81,9 @@ const Leads: React.FC = () => {
 
   const headerActions = (
     <>
-      <button className="flex items-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-        <Icons.Download className="w-4 h-4 mr-2" />
-        Export
-      </button>
+      
       <button
-        className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+        className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
         onClick={() => {
           setDefaultType('lead');
           setIsModalOpen(true);
@@ -99,20 +96,20 @@ const Leads: React.FC = () => {
   );
 
   return (
-    <div className="p-4 sm:p-6 overflow-x-auto">
-      <div className="flex flex-col lg:flex-row gap-6">
+    <div className="p-6 lg:p-8 overflow-x-auto">
+      <div className="flex flex-col lg:flex-row gap-8">
         {/* Filter Sidebar */}
-        <div className="w-full lg:w-64 bg-white p-4 border border-gray-200 rounded-lg shadow-sm h-fit">
-          <p className="font-medium text-gray-700 mb-2">Filter Leads by</p>
-          <div className="text-sm text-gray-600 space-y-4">
+        <div className="w-full lg:w-72 bg-white p-6 border border-gray-200 rounded-xl shadow-sm h-fit">
+          <p className="font-medium text-gray-700 mb-4">Filter Leads by</p>
+          <div className="text-sm text-gray-600 space-y-5">
             <div>
               <label className="flex items-center">
-                <input type="checkbox" className="mr-2" checked={filters.campaigns} onChange={() => handleCheckboxChange('campaigns')} />
+                <input type="checkbox" className="mr-2 h-4 w-4" checked={filters.campaigns} onChange={() => handleCheckboxChange('campaigns')} />
                 Status
               </label>
               {filters.campaigns && (
-                <div className="mt-2 space-y-2 pl-4">
-                  <select className="w-full border border-gray-300 rounded p-1 text-sm">
+                <div className="mt-3 space-y-2 pl-4">
+                  <select className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500">
                     <option>-Select Status Type-</option>
                     <option>New</option>
                     <option>Follow Up</option>
@@ -125,34 +122,38 @@ const Leads: React.FC = () => {
             </div>
             <div>
               <label className="flex items-center">
-                <input type="checkbox" className="mr-2" checked={filters.city} onChange={() => handleCheckboxChange('city')} />
+                <input type="checkbox" className="mr-2 h-4 w-4" checked={filters.city} onChange={() => handleCheckboxChange('city')} />
                 Date
               </label>
               {filters.city && (
-                <div className="mt-2 pl-4 space-y-2">
-                  <input type="date" className="w-full border border-gray-300 rounded p-1 text-sm" />
+                <div className="mt-3 pl-4 space-y-2">
+                  <input type="date" className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500" />
                 </div>
               )}
             </div>
             <div>
               <label className="flex items-center">
-                <input type="checkbox" className="mr-2" checked={filters.company} onChange={() => handleCheckboxChange('company')} />
+                <input type="checkbox" className="mr-2 h-4 w-4" checked={filters.company} onChange={() => handleCheckboxChange('company')} />
                 Company
               </label>
               {filters.company && (
-                <div className="mt-2 pl-4">
-                  <input type="text" placeholder="Company name" className="w-full border border-gray-300 rounded p-1 text-sm" />
+                <div className="mt-3 pl-4">
+                  <input
+                    type="text"
+                    placeholder="Company name"
+                    className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500"
+                  />
                 </div>
               )}
             </div>
             <div>
               <label className="flex items-center">
-                <input type="checkbox" className="mr-2" checked={filters.leadSource} onChange={() => handleCheckboxChange('leadSource')} />
+                <input type="checkbox" className="mr-2 h-4 w-4" checked={filters.leadSource} onChange={() => handleCheckboxChange('leadSource')} />
                 Lead Source
               </label>
               {filters.leadSource && (
-                <div className="mt-2 pl-4">
-                  <select className="w-full border border-gray-300 rounded p-1 text-sm">
+                <div className="mt-3 pl-4">
+                  <select className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500">
                     <option>Email</option>
                     <option>Website</option>
                     <option>Cold Call</option>
@@ -164,8 +165,12 @@ const Leads: React.FC = () => {
               )}
             </div>
 
-            <button className="w-full mt-4 py-2 px-3 bg-blue-600 text-white rounded hover:bg-blue-700">Apply Filter</button>
-            <button className="w-full mt-2 py-2 px-3 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">Clear</button>
+            <button className="w-full mt-6 py-2 px-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              Apply Filter
+            </button>
+            <button className="w-full mt-3 py-2 px-3 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
+              Clear
+            </button>
           </div>
         </div>
 
@@ -179,38 +184,71 @@ const Leads: React.FC = () => {
           />
 
           {/* Summary Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
-            <div className="bg-white shadow-sm rounded-xl p-4 border border-gray-200">
-              <p className="text-sm text-gray-500">Total Leads</p>
-              <p className="text-xl font-semibold text-gray-900">{mockLeads.length}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div className="bg-white shadow-sm rounded-xl p-5 border border-gray-200">
+              <div className="flex items-center">
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                  <Icons.Users className="w-5 h-5 text-blue-600" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Total Leads</p>
+                  <p className="text-xl font-semibold text-gray-900">{mockLeads.length}</p>
+                </div>
+              </div>
             </div>
-            <div className="bg-white shadow-sm rounded-xl p-4 border border-gray-200">
-              <p className="text-sm text-gray-500">New Leads</p>
-              <p className="text-xl font-semibold text-gray-900">
-                {mockLeads.filter(lead => lead.status === 'New').length}
-              </p>
+            <div className="bg-white shadow-sm rounded-xl p-5 border border-gray-200">
+              <div className="flex items-center">
+                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+                  <Icons.UserPlus className="w-5 h-5 text-green-600" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">New Leads</p>
+                  <p className="text-xl font-semibold text-gray-900">
+                    {mockLeads.filter(lead => lead.status === 'New').length}
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className="bg-white shadow-sm rounded-xl p-4 border border-gray-200">
-              <p className="text-sm text-gray-500">Converted Leads</p>
-              <p className="text-xl font-semibold text-gray-900">
-                {mockLeads.filter(lead => lead.status === 'Converted').length}
-              </p>
+            <div className="bg-white shadow-sm rounded-xl p-5 border border-gray-200">
+              <div className="flex items-center">
+                <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-3">
+                  <Icons.CheckCircle className="w-5 h-5 text-purple-600" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Converted Leads</p>
+                  <p className="text-xl font-semibold text-gray-900">
+                    {mockLeads.filter(lead => lead.status === 'Converted').length}
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className="bg-white shadow-sm rounded-xl p-4 border border-gray-200">
-              <p className="text-sm text-gray-500">Total Value</p>
-              <p className="text-xl font-semibold text-gray-900">
-                ${mockLeads.reduce((sum, lead) => sum + lead.value, 0).toLocaleString()}
-              </p>
+            <div className="bg-white shadow-sm rounded-xl p-5 border border-gray-200">
+              <div className="flex items-center">
+                <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center mr-3">
+                  <Icons.DollarSign className="w-5 h-5 text-orange-600" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Total Value</p>
+                  <p className="text-xl font-semibold text-gray-900">
+                    ${mockLeads.reduce((sum, lead) => sum + lead.value, 0).toLocaleString()}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="mt-4">
-            <DataTable
-              columns={columns}
-              data={mockLeads}
-              actions={actions}
-              onRowClick={(lead) => console.log('View lead:', lead)}
-            />
+          {/* Table Section */}
+          <div className="mt-8 bg-white shadow-sm rounded-xl border border-gray-200">
+            <div className="p-6">
+              <DataTable
+                columns={columns}
+                data={mockLeads}
+                actions={actions}
+                onRowClick={(lead) => console.log('View lead:', lead)}
+                className="min-w-full"
+                rowClassName="hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0 py-3"
+              />
+            </div>
           </div>
         </div>
       </div>
